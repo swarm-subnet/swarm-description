@@ -1,0 +1,13 @@
+# Bitcraze Crazyflie 2.x in X configuration, the default drone: the search-and-rescue families fly it, as did the
+# retired Autopilot families. cf2x.urdf and cf2.dae are upstream's, from gym-pybullet-drones (MIT), with only the mesh
+# path changed; mass, inertia and coefficients live in the URDF. The controller is the gym's stock DSL PID.
+
+[files]
+body = "cf2x.urdf"
+
+[body]
+hull_radius_m = 0.12              # set in simulation: centre to edge, for clearance and the altitude ray
+
+[camera]
+eye_forward_m = 0.13              # set in simulation: camera eye ahead of the body centre
+eye_up_m = 0.05                   # set in simulation: camera eye above the body centre

@@ -1,0 +1,32 @@
+# Run on every commit once installed:  pre-commit install
+# Run over the whole tree on demand:   pre-commit run --all-files
+#
+# URDFs and meshes keep the bytes they were flown with, so the text hooks skip them;
+# check-xml and check-added-large-files still see them.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        exclude: &skip |
+          (?x)^(
+            swarm_description/[^/]+/meshes/.*|
+            swarm_description/[^/]+/[^/]+\.urdf
+          )$
+      - id: end-of-file-fixer
+        exclude: *skip
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-toml
+      - id: check-xml
+        files: \.urdf$
+      - id: check-case-conflict
+      - id: check-added-large-files
+        args: [--maxkb=51200]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.5
+    hooks:
+      - id: ruff-check
+        args: [--fix]
