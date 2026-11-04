@@ -31,12 +31,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip build
           python -m build --wheel
-          python -m pip install dist/*.whl pytest
+          python -m pip install dist/*.whl pytest pytest-cov
 
       - name: Run the package tests from outside the source tree
         run: |
           cd "$RUNNER_TEMP"
-          python -m pytest -q "$GITHUB_WORKSPACE/tests"
+          python -m pytest -q "$GITHUB_WORKSPACE/tests" --cov=swarm_description --cov-report=term-missing
 
   lint:
     runs-on: ubuntu-latest

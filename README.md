@@ -131,10 +131,9 @@ nothing more; one that needs its own controller adds that controller to the fami
    scoring change.
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e . pytest pre-commit
-pytest
-pre-commit run --all-files
+uv sync --group dev
+uv run pytest
+uv run pre-commit run --all-files
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

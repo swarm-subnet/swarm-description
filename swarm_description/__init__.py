@@ -25,6 +25,7 @@ in the URDF, where the simulator reads it, so no value is written twice.
 
 import tomllib
 from importlib.resources import files
+from typing import Any
 from xml.etree import ElementTree
 
 __version__ = "1.0.0"
@@ -46,7 +47,7 @@ def drone_dir(name: str) -> str:
     return str(folder)
 
 
-def get_params(name: str) -> dict:
+def get_params(name: str) -> dict[str, Any]:
     """A fresh copy of one drone's params.toml as nested dicts, in file order."""
     drone_dir(name)
     with (_ROOT / name / PARAMS_FILE).open("rb") as handle:

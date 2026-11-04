@@ -30,3 +30,12 @@ repos:
     hooks:
       - id: ruff-check
         args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.4.1
+    hooks:
+      - id: mypy
+        args: []  # settings come from [tool.mypy]
+        pass_filenames: false
+        additional_dependencies: [pytest]
