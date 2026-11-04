@@ -124,8 +124,8 @@ nothing more; one that needs its own controller adds that controller to the fami
 ## Changing a Drone
 
 1. Open a pull request here. CI installs the built wheel and checks every drone folder.
-2. Bump `__version__` in `swarm_description/__init__.py` and tag the merge commit with the same
-   number (`v1.1.0`).
+2. Bump `__version__` in `swarm_description/__init__.py`, add the release to `CHANGELOG.md`, and tag
+   the merge commit with the same number (`v1.1.0`).
 3. Bump the tag in the swarm repository's `requirements.txt`, refresh its `pixi.lock`, and bump the
    swarm version. A drone change changes flight results, so it follows the same release rules as a
    scoring change.
