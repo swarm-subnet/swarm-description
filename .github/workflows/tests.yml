@@ -31,7 +31,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip build
           python -m build --wheel
-          python -m pip install dist/*.whl pytest pytest-cov
+          python -m pip install dist/*.whl pytest pytest-cov swarm-bullet3==2.0.0.5
 
       - name: Run the package tests from outside the source tree
         run: |

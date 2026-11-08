@@ -15,7 +15,7 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-"""Every drone the Swarm simulator flies, one folder each.
+"""Every drone the Swarm simulator flies, and the dock and props around them, one folder each.
 
 A folder holds the drone's URDFs, the meshes they draw with, and a params.toml with
 the numbers the URDF cannot carry: motor limits, controller gains, sensor specs.
@@ -35,7 +35,7 @@ PARAMS_FILE = "params.toml"
 
 
 def drones() -> list[str]:
-    """Names of every drone in the package, sorted."""
+    """Names of every description in the package, drones, dock and props alike, sorted."""
     return sorted(entry.name for entry in _ROOT.iterdir() if entry.is_dir() and (entry / PARAMS_FILE).is_file())
 
 

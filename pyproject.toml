@@ -38,6 +38,7 @@ dev = [
   "pytest>=8",
   "pytest-cov>=6",
   "ruff>=0.8",
+  "swarm-bullet3==2.0.0.5",  # the engine the simulator flies, for the load tests
 ]
 
 [tool.setuptools]
@@ -70,6 +71,10 @@ select = ["E4", "E7", "E9", "F", "I"]
 python_version = "3.11"
 strict = true
 files = ["swarm_description", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["pybullet"]  # ships no type information
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -25,7 +25,8 @@ import pytest
 
 import swarm_description
 
-DRONES = ("cf2x", "interceptor", "m4td", "tello")
+DRONES = ("cf2x", "dock3", "interceptor", "m4td", "swarm_drone", "tello")
+FLYING = ("cf2x", "interceptor", "m4td", "swarm_drone", "tello")
 MESH = re.compile(r'filename="\./(meshes/[^"]+)"')
 
 
@@ -55,7 +56,7 @@ def test_every_mesh_a_urdf_draws_with_is_shipped(name: str) -> None:
             assert (folder / mesh).is_file(), f"{name} {part} draws with missing {mesh}"
 
 
-@pytest.mark.parametrize("name", DRONES)
+@pytest.mark.parametrize("name", FLYING)
 def test_the_flying_body_carries_its_physics(name: str) -> None:
     """The flying body's URDF has the coefficients the simulator parses, all positive where they must be."""
     props = swarm_description.get_properties(name)

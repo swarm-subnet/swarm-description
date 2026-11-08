@@ -7,3 +7,4 @@ dist/
 .pixi/
 .pytest_cache/
 .ruff_cache/
+.coverage

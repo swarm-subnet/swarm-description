@@ -43,6 +43,8 @@ a Python package, pinned to a release tag. The worlds the drones fly through liv
 | **Bitcraze Crazyflie 2.x** | `cf2x/` | Search and Rescue, Swarm Search and Rescue |
 | **Ryze Tello** | `tello/` | Office Interceptor (completed, kept for re-runs) |
 | **36 cm interceptor** | `interceptor/` | Interceptor (completed, kept for re-runs) |
+| **DJI Dock 3** | `dock3/` | Swarm Sentinel: the station the Matrice takes off from and lands in |
+| **Conveyor drone** | `swarm_drone/` | Warehouse maps: the drones riding the conveyor belts, a fixed prop |
 
 Each folder's README says where its numbers come from.
 
@@ -60,7 +62,8 @@ swarm_description/
     <drone>.urdf     the flying body: shape, mass, inertia and the coefficients in its <properties> tag
     meshes/          the files the URDFs draw with, referenced as ./meshes/<file>
     params.toml      every number the URDF cannot hold, each with its source
-tests/               checks that every drone ships its params, URDFs, meshes and physics
+tests/               checks that every folder ships its params, URDFs and meshes, and that each URDF
+                     loads in swarm-bullet3 with the masses, joints and inertias it describes
 ```
 
 **Each value is written once.** Everything the gym parses (mass, inertia, arm length, prop radius,
@@ -83,7 +86,7 @@ stays in the family's code.
 ```python
 import swarm_description
 
-swarm_description.drones()                    # ['cf2x', 'interceptor', 'm4td', 'tello']
+swarm_description.drones()                    # ['cf2x', 'dock3', 'interceptor', 'm4td', 'swarm_drone', 'tello']
 swarm_description.get_urdf("m4td")            # .../m4td/m4td.urdf, the flying body
 swarm_description.get_urdf("m4td", "moving")  # .../m4td/m4td_moving.urdf, any URDF named in [files]
 swarm_description.get_params("m4td")          # params.toml as nested dicts, a fresh copy each call
