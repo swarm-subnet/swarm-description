@@ -1,0 +1,18 @@
+# The 36 cm interceptor: the cf2x drawn and flown at three times its size, for the Interceptor family (retired; kept
+# so its champion can still be re-run). Its scaled mass, inertia and coefficients live in interceptor_drone.urdf.
+# The controller is the gym's DSL PID with the gains below.
+
+[files]
+body = "interceptor_drone.urdf"
+
+[body]
+scale_of_cf2x = 3                 # cf2x x3, about 36 cm across the diagonal
+
+# The DSL PID gains sized for the 36 cm body, validated in simulation: position loop, then attitude loop.
+[controller]
+p_force = [2.3, 2.3, 7.1]
+i_force = [0.3, 0.3, 0.3]
+d_force = [1.1, 1.1, 2.9]
+p_torque = [2.3e6, 2.3e6, 2.0e6]
+i_torque = [0.0, 0.0, 16500.0]
+d_torque = [6.6e5, 6.6e5, 4.0e5]
