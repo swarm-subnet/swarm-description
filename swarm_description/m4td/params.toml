@@ -1,0 +1,115 @@
+# DJI Matrice 4TD, the aircraft of the Solar Patrol family.
+# Mass, inertia, arm length, thrust, torque and drag coefficients live in m4td.urdf, where the simulator reads them.
+# Axes: x nose, y left, z up, metres, gimbal level.
+
+[files]
+body = "m4td.urdf"                # the flying body: the real outline as its collision shape, thrust at the CAD motor positions
+moving = "m4td_moving.urdf"       # rotors, folding blades and gimbal head: no collision, posed on the aircraft before each picture
+
+[motors]
+max_rpm = 6300.0                  # DJI: maximum propeller speed
+idle_rpm = 900.0                  # tuned in simulation: the slowest a spinning motor is commanded in flight
+spin = [1, -1, 1, -1]             # rotor turn sense seen from above, +1 counter-clockwise (the gym's torque signs)
+positions_xy_m = [[0.17065, -0.1915], [-0.17065, -0.1715], [-0.17065, 0.1715], [0.17065, 0.1915]]  # DJI CAD
+docked_fold_deg = 45.0            # DJI manual: blades set 90 degrees apart before the dock closes
+
+[flight]
+max_tilt_deg = 25.0               # DJI: Normal mode, the only mode with the dock
+hover_endurance_min = 47.0        # DJI: hover time on one battery
+
+# Tuned in simulation on the patrol's physics: speed loop in newtons per m/s (and per m of accumulated speed error),
+# attitude loop in PWM units.
+[controller]
+vel_gain = [6.0, 6.0, 7.4]
+vel_integral = [1.0, 1.0, 2.0]    # a small, fading integral for what the drag feed-forward misses (wind)
+integral_band_mps = 1.0           # it only learns once the speed is this close to the target
+integral_limit = 4.0              # room for the steady push of a 12 m/s wind on top of the rotor drag
+integral_leak_s = 30.0
+att_p = [45000.0, 45000.0, 20000.0]
+att_i = [0.0, 0.0, 0.0]
+att_d = [9000.0, 9000.0, 24000.0]
+
+[gimbal]
+pivot_m = [0.1295, 0.0, -0.0340]           # DJI CAD: tilt axis, along y
+wide_camera_m = [0.1579, 0.0162, -0.0373]  # DJI CAD: front of the wide camera's glass
+laser_window_m = [0.1454, -0.0095, -0.0560]  # DJI CAD: centre of the laser rangefinder window
+
+[cameras]
+wide_diagonal_fov_deg = 82.0      # DJI: wide camera
+thermal_diagonal_fov_deg = 45.0   # DJI: thermal camera
+zoom_diagonal_fov_deg = { 3 = 35.0, 7 = 15.0 }  # DJI: medium tele and tele cameras, keyed by zoom
+video_fps = 30.0                  # DJI: normal video stream
+night_scene_fps = 15.0            # M4T footage over unlit farmland: Night Scene slows the stream to expose twice as long
+binned_pixels = 12.0e6            # DJI: the 48 MP array read binned to 12 MP for video
+read_noise_e = 1.5                # estimate: read noise at the high conversion gain of night ISOs
+noise_reduction_frames = 4.0      # estimate: the stream's temporal noise reduction averages about four frames
+night_vision_beam_deg = 5.7       # DJI: infrared auxiliary light
+night_vision_range_m = 100.0      # DJI: infrared auxiliary light range
+night_vision_min_zoom = 7         # DJI: night vision with the infrared light only at 7x zoom or above
+
+# DJI Matrice 4 series: wide 1/1.3 inch f/1.7, medium tele 1/1.3 inch f/2.8, tele 1/1.5 inch f/2.8, each 48 MP; ISO up
+# to 25,600 in normal mode and 409,600 in night mode, 819,200 on the tele. Keyed by zoom, the wide lens as 1.
+[cameras.lenses.1]
+f_number = 1.7
+sensor_mm2 = 70.3
+iso_normal = 25600.0
+iso_night = 409600.0
+
+[cameras.lenses.3]
+f_number = 2.8
+sensor_mm2 = 70.3
+iso_normal = 25600.0
+iso_night = 409600.0
+
+[cameras.lenses.7]
+f_number = 2.8
+sensor_mm2 = 48.8
+iso_normal = 25600.0
+iso_night = 819200.0
+
+[laser]
+reading_hz = 1.0                  # DJI: 1 Hz
+blind_zone_m = 1.0                # DJI: blind zone
+max_range_m = 1800.0              # DJI: 1 Hz, 20 % reflectivity target
+oblique_range_m = 600.0           # DJI: oblique incidence range, 1:5
+oblique_run_over_rise = 5.0       # DJI: the 1:5 incidence that range is given for
+error_m = 0.2                     # DJI: range accuracy +-(0.2 m + 0.15 % of the distance)
+error_share = 0.0015
+
+[ground_sensor]
+day_range_m = [0.5, 16.0]         # DJI: downward vision, which needs light
+night_range_m = [0.1, 8.0]        # DJI: downward 3D infrared sensor on the Matrice 3D/3TD; the M4TD's is unpublished
+out_of_range_m = 60.0             # DJI: the perception SDK reports 60000 mm when it detects nothing
+position_m = [0.0, 0.0, -0.062]   # centre of the belly, from the collision boxes
+
+[positioning]
+rtk_horizontal_m = 0.1            # DJI: hovering accuracy with RTK
+rtk_vertical_m = 0.1              # DJI: hovering accuracy with RTK
+
+[link]
+command_delay_ms = 10             # DJI: sdr_cmd_delay
+data_delay_ms = [60, 80]          # DJI: liveview_delay_time
+
+# Surface temperatures for the thermal camera: rise over the air when warm (K), warm-up and cool-down time constants
+# (s), emissivity. Estimates: 20 to 35 K rise on drone motors measured in flight (arXiv 1906.04152); DJI docks keep the
+# battery between 10 and 35 C and it warms through a flight; the gimbal's electronics run a few kelvin over the air.
+[heat]
+battery_base_c = 25.0             # the dock conditions the battery before take-off
+
+[heat.sources.motor]
+rise_k = 25.0
+warm_up_s = 60.0
+cool_down_s = 240.0
+emissivity = 0.85
+
+[heat.sources.battery]
+rise_k = 10.0
+warm_up_s = 400.0
+cool_down_s = 900.0
+emissivity = 0.92
+
+[heat.sources.gimbal]
+rise_k = 8.0
+warm_up_s = 120.0
+cool_down_s = 300.0
+emissivity = 0.92

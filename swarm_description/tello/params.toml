@@ -1,0 +1,48 @@
+# Ryze Tello, the drone of the Office Interceptor family (retired; kept so its champions can still be re-run).
+# Mass, inertia, arm length, prop radius, thrust, torque and drag coefficients live in tello.urdf, where the simulator
+# reads them. The controller is the gym's stock DSL PID, tuned for the same weight class.
+
+[files]
+body = "tello.urdf"
+
+[rc]
+max_speed_mps = 3.0               # Tello SDK: per-axis stick-full speed in slow mode
+max_yaw_rate_rad_s = 3.141        # Tello SDK: stick-full yaw rate
+
+[motors]
+lag_s = 0.040                     # brushed 8520 motor lag, 30 to 60 ms; tuned in simulation
+ground_effect_coef = 4.0          # thrust gain x (prop_r/4z)^2: about 25 % at prop height
+
+[body]
+drag_coef = 0.004                 # N/(m/s)^2, from CdA ~0.006 m^2 x Cd 1.2
+visible_width_m = 0.18            # body width the camera sees
+visible_height_m = 0.08           # body and guards height
+
+[camera]
+eye_forward_m = 0.035             # measured on the real Tello
+
+# State packets over UDP. Units from the SDK docs; noise figures calibrated against the SecureLink Tello dataset.
+[telemetry]
+rate_hz = 10.0                    # Tello SDK: state packet rate
+delay_ms = 40                     # tuned in simulation: packets carry the state of two control steps ago
+drop_prob = 0.05                  # per-packet loss probability
+attitude_noise_deg = 1.0          # IMU attitude noise (std, per packet)
+velocity_noise_mps = 0.05         # VPS velocity noise (std)
+velocity_bias_mps = 0.006         # per-episode optical-flow velocity bias, per horizontal axis (std)
+velocity_walk_mps = 0.0005        # velocity bias random walk per packet (std)
+accel_noise_mps2 = 0.3            # accelerometer noise (std)
+accel_bias_mps2 = 0.15            # per-episode accelerometer bias (std)
+tof_noise_m = 0.13                # downward ToF noise (std, measured 0.13)
+tof_outlier_prob = 0.02           # per-packet probability of a spurious ToF range
+tof_max_m = 8.0                   # ToF range limit; reads the maximum beyond it
+height_noise_m = 0.03             # fused-height noise (std)
+baro_noise_m = 0.15               # barometer noise (std, measured 0.12 to 0.16)
+baro_walk_m = 0.005               # barometer random walk per packet (std)
+vps_drift_force_n = 0.002         # slow lateral drift force emulating VPS error
+
+# Tello SDK: the steps each state value is reported in.
+[telemetry.resolution]
+attitude_deg = 1.0                # whole degrees
+velocity_mps = 0.1                # dm/s
+accel_mps2 = 0.01                 # accelerometer granularity, about 0.001 g
+height_m = 0.01                   # cm

@@ -1,0 +1,17 @@
+# DJI Dock 3, the station Swarm Sentinel's aircraft takes off from and lands in. Both bodies are static: they load
+# with a fixed base and carry no mass, so they have no <properties> tag.
+
+[files]
+body = "dock3.urdf"               # the body and its two lids, a solid the aircraft can hit
+pad = "dock3_pad.urdf"            # DJI's landing pad, the only part where a landing counts
+
+[size]
+closed_m = [0.640, 0.745, 0.770]  # DJI: outer sizes with the RTK module, the wind gauge and the base
+open_m = [1.760, 0.745, 0.485]    # DJI: outer sizes with the lids open
+base_m = 0.70                     # DJI installation manual: concrete base at least 700 x 700 mm
+
+[lids]
+travel_s = 4.0                    # DJI's footage: the lids move for about four seconds
+
+[aircraft]
+rest_height_m = 0.417             # DJI CAD: the M4TD's body origin above the ground when it rests on the pad

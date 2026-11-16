@@ -1,0 +1,5 @@
+# The drones that ride the warehouse conveyor belts: a scenery prop, never flown. It loads with a fixed base, so its
+# mass and coefficients in swarm_drone.urdf never act; its shape and look are what a camera sees.
+
+[files]
+body = "swarm_drone.urdf"
